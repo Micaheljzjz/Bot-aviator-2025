@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aviator Predictor</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .glow-effect {
+      box-shadow: 0 0 15px rgba(220, 38, 38, 0.7);
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex items-center justify-center px-4">
+  <div class="bg-red-900 p-6 rounded-xl shadow-lg max-w-md w-full space-y-4">
+    <h1 class="text-2xl font-bold text-center text-white">
+      <span class="inline-block transform rotate-45 mr-2">🚀</span>
+      Aviator Predictor
+    </h1>
+    <p class="text-center text-gray-300 text-sm">
+      Ingresa los últimos multiplicadores para predecir el próximo
+    </p>
+
+    <div>
+      <label for="multis" class="block text-sm font-medium mb-1">
+        Multiplicadores anteriores (separados por comas):
+      </label>
+      <textarea id="multis" class="w-full p-2 rounded bg-gray-800 text-white border border-gray-700" rows="3"></textarea>
+    </div>
+
+    <button id="predictBtn" class="w-full bg-red-700 hover:bg-red-800 text-white font-semibold py-2 rounded glow-effect transition duration-200">
+      📋 Predecir próximo multiplicador
+    </button>
+
+    <div id="result" class="mt-4 text-center">
+      <h2 class="text-xl font-semibold text-red-400">Predicción:</h2>
+      <p id="prediction" class="text-3xl font-bold text-green-400 mt-2">--</p>
+      <div class="text-sm mt-2">
+        Últimos 5: <span id="lastFive"></span>
+      </div>
+    </div>
+
+    <p class="text-xs text-gray-400 text-center mt-4">
+      Este predictor no garantiza resultados exactos. Úsalo como referencia.
+    </p>
+  </div>
+
+  <script>
+    document.getElementById("predictBtn").addEventListener("click", () => {
+      const input = document.getElementById("multis").value;
+      const numbers = input
+        .split(",")
+        .map(n => parseFloat(n))
+        .filter(n => !isNaN(n));
+
+      if (numbers.length < 1) {
+        document.getElementById("prediction").textContent = "Entrada inválida";
+        return;
+      }
+
+      const lastFive = numbers.slice(-5);
+      const average = lastFive.reduce((a, b) => a + b, 0) / lastFive.length;
+      const adjustment = (Math.random() * 0.4 - 0.2);
+      const prediction = (average + adjustment).toFixed(2);
+
+      document.getElementById("prediction").textContent = prediction;
+      document.getElementById("lastFive").textContent = lastFive.join(", ");
+    });
+  </script>
+</body>
+</html>
